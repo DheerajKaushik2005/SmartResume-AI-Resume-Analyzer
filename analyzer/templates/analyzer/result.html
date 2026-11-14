@@ -1,0 +1,282 @@
+
+{% extends "analyzer/base.html" %}
+
+{% block title %}
+    Analysis result | SmartResume
+{% endblock %}
+
+{% block content %}
+
+
+<!-- RESULT HEADER -->
+
+<div class="result-top">
+
+    <!-- BACK TO HOME -->
+
+    <a class="back" href="{% url 'home' %}">
+        ← New analysis
+    </a>
+
+
+    <!-- PAGE HEADING -->
+
+    <span class="eyebrow">
+        ANALYSIS COMPLETE
+    </span>
+
+    <h1>
+        Your resume <em>insights.</em>
+    </h1>
+
+    <p>
+        Here is how your resume text compares with the selected job description.
+    </p>
+
+</div>
+
+
+<!-- RESULT GRID -->
+
+<section class="result-grid">
+
+
+    <!-- RESUME SIMILARITY SCORE CARD -->
+
+    <div class="card score-card">
+
+        <span class="number">
+            RESUME / JOB TEXT SIMILARITY
+        </span>
+
+
+        <!-- SCORE CIRCLE -->
+
+        <div
+            class="score-ring"
+            style="--score:{{ analysis.match_score }}%"
+        >
+
+            <div>
+
+                <strong>
+                    {{ analysis.match_score }}%
+                </strong>
+
+                <small>
+                    similarity
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <!-- MATCH STATUS -->
+
+        <h2>
+
+            {% if analysis.match_score >= 60 %}
+
+                Good keyword overlap
+
+            {% elif analysis.match_score >= 35 %}
+
+                Some relevant overlap
+
+            {% else %}
+
+                Room to improve
+
+            {% endif %}
+
+        </h2>
+
+
+        <!-- SCORE INFORMATION -->
+
+        <p>
+            This is a text similarity estimate, not an official ATS score
+            or hiring probability.
+        </p>
+
+
+        <!-- RESUME FILE INFORMATION -->
+
+        <div class="score-file">
+
+            <span class="file-badge">
+                PDF
+            </span>
+
+            <span>
+
+                <strong>
+                    {{ analysis.resume_name }}
+                </strong>
+
+                <small>
+                    {{ analysis.job_title|default:"Job role not specified" }}
+                </small>
+
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- SKILLS ANALYSIS CARD -->
+
+    <div class="card skills-card">
+
+
+        <!-- MATCHED SKILLS SECTION -->
+
+        <div class="skills-block">
+
+            <div class="skills-heading">
+
+                <h2>
+                    Matched skills
+                </h2>
+
+                <span class="count good">
+                    {{ analysis.matched_skills|length }}
+                </span>
+
+            </div>
+
+
+            <p>
+                Skills found in both your resume and the job description.
+            </p>
+
+
+            <!-- DISPLAY MATCHED SKILLS -->
+
+            <div class="chips">
+
+                {% for skill in analysis.matched_skills %}
+
+                    <span class="chip matched">
+                        {{ skill }}
+                    </span>
+
+                {% empty %}
+
+                    <span class="muted">
+                        No catalogue skills matched.
+                        Try adding relevant skills where accurate.
+                    </span>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+
+        <!-- MISSING SKILLS SECTION -->
+
+        <div class="skills-block missing-block">
+
+            <div class="skills-heading">
+
+                <h2>
+                    Skills to review
+                </h2>
+
+                <span class="count warning">
+                    {{ analysis.missing_skills|length }}
+                </span>
+
+            </div>
+
+
+            <p>
+                Skills found in the job description but not detected in your resume.
+            </p>
+
+
+            <!-- DISPLAY MISSING SKILLS -->
+
+            <div class="chips">
+
+                {% for skill in analysis.missing_skills %}
+
+                    <span class="chip missing">
+                        {{ skill }}
+                    </span>
+
+                {% empty %}
+
+                    <span class="muted">
+                        No missing catalogue skills detected.
+                    </span>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+
+        <!-- NEXT STEP NOTE -->
+
+        <div class="action-note">
+
+            <strong>
+                Next step
+            </strong>
+
+            <p>
+                Review the missing skills. Add a skill only if you genuinely
+                have that experience; never add keywords just to increase a score.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- RESULT ACTION BUTTONS -->
+
+<div class="result-actions">
+
+
+    <!-- ANALYZE ANOTHER RESUME -->
+
+    <a
+        class="primary-btn link-btn"
+        href="{% url 'home' %}"
+    >
+        Analyze another resume →
+    </a>
+
+
+    <!-- PRINT OR SAVE REPORT -->
+
+    <button
+        class="secondary-btn"
+        onclick="window.print()"
+    >
+        Print / Save report
+    </button>
+
+
+    <!-- VIEW ANALYSIS HISTORY -->
+
+    <a
+        class="secondary-btn"
+        href="{% url 'history' %}"
+    >
+        View history
+    </a>
+
+</div>
+
+
+{% endblock %}

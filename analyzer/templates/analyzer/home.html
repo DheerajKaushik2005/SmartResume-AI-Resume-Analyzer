@@ -1,0 +1,389 @@
+
+{% extends "analyzer/base.html" %}
+
+{% block title %}
+    SmartResume | AI Resume Analyzer
+{% endblock %}
+
+{% block content %}
+
+<!-- HERO SECTION -->
+
+<section class="hero">
+
+    <div class="eyebrow">
+        <span class="pulse"></span>
+        RESUME INTELLIGENCE PLATFORM
+    </div>
+
+    <h1>
+        Your next opportunity<br>
+        starts with a <em>stronger resume.</em>
+    </h1>
+
+    <p>
+        Compare your resume with a job description, discover matching skills
+        and find areas to improve — in seconds.
+    </p>
+
+    <div class="hero-tags">
+        <span>✦ TF-IDF matching</span>
+        <span>✓ PDF text extraction</span>
+        <span>↗ Skill gap insights</span>
+    </div>
+
+</section>
+
+
+<!-- ERROR MESSAGE -->
+
+{% if error %}
+
+    <div class="error">
+        {{ error }}
+    </div>
+
+{% endif %}
+
+
+<!-- ANALYZER SECTION -->
+
+<section class="analyzer-layout">
+
+    <!-- RESUME UPLOAD FORM -->
+
+    <div class="card form-card">
+
+        <div class="card-title">
+
+            <div>
+                <span class="number">01</span>
+
+                <div>
+                    <h2>Upload your resume</h2>
+                    <p>Start with your latest PDF resume</p>
+                </div>
+            </div>
+
+            <span class="required">REQUIRED</span>
+
+        </div>
+
+
+        <!-- FORM START -->
+
+        <form method="post" enctype="multipart/form-data">
+
+            {% csrf_token %}
+
+
+            <!-- PDF UPLOAD -->
+
+            <label class="upload-zone" for="resume">
+
+                <span class="upload-symbol">↑</span>
+
+                <strong id="file-name">
+                    Choose a resume PDF
+                </strong>
+
+                <small>
+                    Drag and drop or click to browse · Max 5 MB
+                </small>
+
+                <input
+                    id="resume"
+                    name="resume"
+                    type="file"
+                    accept=".pdf,application/pdf"
+                    required
+                >
+
+            </label>
+
+
+            <!-- JOB TITLE -->
+
+            <label class="field-label" for="job_title">
+                JOB TITLE <span>(OPTIONAL)</span>
+            </label>
+
+            <input
+                class="text-input"
+                id="job_title"
+                name="job_title"
+                placeholder="e.g. Junior Python Developer"
+                maxlength="150"
+            >
+
+
+            <!-- JOB DESCRIPTION HEADING -->
+
+            <div class="card-title job-title">
+
+                <div>
+                    <span class="number">02</span>
+
+                    <div>
+                        <h2>Add job description</h2>
+                        <p>Paste the role you want to apply for</p>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- JOB DESCRIPTION INPUT -->
+
+            <label class="field-label" for="job_description">
+                JOB DESCRIPTION
+            </label>
+
+            <textarea
+                id="job_description"
+                name="job_description"
+                minlength="50"
+                maxlength="20000"
+                required
+                placeholder="Paste the job responsibilities, required skills and qualifications here..."
+            ></textarea>
+
+
+            <!-- CHARACTER COUNT -->
+
+            <div class="textarea-meta">
+
+                <span>
+                    Minimum 50 characters
+                </span>
+
+                <span id="char-count">
+                    0 / 20,000
+                </span>
+
+            </div>
+
+
+            <!-- SUBMIT BUTTON -->
+
+            <button class="primary-btn" type="submit">
+                Analyze my resume
+                <span>→</span>
+            </button>
+
+
+            <!-- PRIVACY NOTE -->
+
+            <p class="privacy-note">
+                🔒 Demo note: this one-day version stores analysis metadata,
+                not the uploaded PDF.
+            </p>
+
+        </form>
+
+    </div>
+
+
+    <!-- SIDEBAR -->
+
+    <aside class="side-column">
+
+
+        <!-- HOW IT WORKS CARD -->
+
+        <div class="card how-card">
+
+            <div class="side-heading">
+
+                <span class="number">
+                    HOW IT WORKS
+                </span>
+
+                <span class="spark">✦</span>
+
+            </div>
+
+
+            <!-- STEP 1 -->
+
+            <div class="step">
+
+                <span class="step-icon">01</span>
+
+                <div>
+                    <strong>Extract</strong>
+
+                    <p>
+                        Read text from your PDF resume.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <!-- STEP 2 -->
+
+            <div class="step">
+
+                <span class="step-icon">02</span>
+
+                <div>
+                    <strong>Compare</strong>
+
+                    <p>
+                        TF-IDF and cosine similarity compare both texts.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <!-- STEP 3 -->
+
+            <div class="step">
+
+                <span class="step-icon">03</span>
+
+                <div>
+                    <strong>Improve</strong>
+
+                    <p>
+                        See matched and missing skills.
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- QUICK TIP CARD -->
+
+        <div class="tip-card">
+
+            <span>✦ QUICK TIP</span>
+
+            <p>
+                Use a text-based PDF rather than a scanned image.
+                Include measurable achievements and skills relevant to the role.
+            </p>
+
+        </div>
+
+    </aside>
+
+</section>
+
+
+<!-- RECENT ANALYSES SECTION -->
+
+{% if recent %}
+
+<section class="recent-section">
+
+
+    <!-- SECTION HEADING -->
+
+    <div class="section-heading">
+
+        <div>
+            <span class="eyebrow">YOUR WORKSPACE</span>
+            <h2>Recent analyses</h2>
+        </div>
+
+        <a href="{% url 'history' %}">
+            View all →
+        </a>
+
+    </div>
+
+
+    <!-- RECENT ANALYSIS LIST -->
+
+    <div class="recent-list">
+
+        {% for item in recent %}
+
+        <a
+            class="recent-row"
+            href="{% url 'result' item.id %}"
+        >
+
+            <span class="file-badge">
+                PDF
+            </span>
+
+
+            <span class="recent-name">
+
+                <strong>
+                    {{ item.resume_name }}
+                </strong>
+
+                <small>
+                    {{ item.job_title|default:"Job role not specified" }}
+                    ·
+                    {{ item.created_at|date:"d M Y, H:i" }}
+                </small>
+
+            </span>
+
+
+            <span class="score-pill">
+                {{ item.match_score }}%
+            </span>
+
+
+            <span class="row-arrow">
+                →
+            </span>
+
+        </a>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+{% endif %}
+
+
+<!-- JAVASCRIPT -->
+
+<script>
+
+// GET RESUME FILE INPUT
+
+const fileInput = document.getElementById("resume");
+
+
+// DISPLAY SELECTED FILE NAME
+
+fileInput.addEventListener("change", () => {
+
+    document.getElementById("file-name").textContent =
+        fileInput.files.length
+            ? fileInput.files[0].name
+            : "Choose a resume PDF";
+
+});
+
+
+// GET JOB DESCRIPTION TEXTAREA
+
+const jd = document.getElementById("job_description");
+
+
+// UPDATE CHARACTER COUNT
+
+jd.addEventListener("input", () => {
+
+    document.getElementById("char-count").textContent =
+        jd.value.length.toLocaleString() + " / 20,000";
+
+});
+
+</script>
+
+{% endblock %}

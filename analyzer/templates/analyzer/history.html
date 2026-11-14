@@ -1,0 +1,142 @@
+
+{% extends "analyzer/base.html" %}
+
+{% block title %}
+    Analysis history | SmartResume
+{% endblock %}
+
+{% block content %}
+
+<div class="result-top">
+
+    <a class="back" href="{% url 'home' %}">
+        ← Dashboard
+    </a>
+
+    <span class="eyebrow">
+        WORKSPACE
+    </span>
+
+    <h1>
+        Analysis <em>history.</em>
+    </h1>
+
+    <p>
+        Previously completed resume comparisons saved in this browser's local project database.
+    </p>
+
+</div>
+
+
+<div class="card history-card">
+
+    {% for item in page_obj %}
+
+        <div class="history-item">
+
+            <span class="file-badge">
+                PDF
+            </span>
+
+            <span class="recent-name">
+
+                <strong>
+                    {{ item.resume_name }}
+                </strong>
+
+                <small>
+                    {{ item.job_title|default:"Job role not specified" }}
+                    ·
+                    {{ item.created_at|date:"d M Y, H:i" }}
+                </small>
+
+            </span>
+
+            <span class="score-pill">
+                {{ item.match_score }}%
+            </span>
+
+            <a class="text-link" href="{% url 'result' item.id %}">
+                Open
+            </a>
+
+            <form
+                method="post"
+                action="{% url 'delete_history' item.id %}"
+            >
+
+                {% csrf_token %}
+
+                <button
+                    class="delete-btn"
+                    type="submit"
+                    aria-label="Delete analysis"
+                >
+                    ×
+                </button>
+
+            </form>
+
+        </div>
+
+    {% empty %}
+
+        <div class="empty-history">
+
+            <div>
+                ⌁
+            </div>
+
+            <h2>
+                No analyses yet
+            </h2>
+
+            <p>
+                Upload a resume to see your analysis history here.
+            </p>
+
+            <a
+                href="{% url 'home' %}"
+                class="primary-btn link-btn"
+            >
+                Start analyzing →
+            </a>
+
+        </div>
+
+    {% endfor %}
+
+</div>
+
+
+{% if page_obj.paginator.num_pages > 1 %}
+
+    <div class="pagination">
+
+        {% if page_obj.has_previous %}
+
+            <a href="?page={{ page_obj.previous_page_number }}">
+                ← Previous
+            </a>
+
+        {% endif %}
+
+        <span>
+            Page {{ page_obj.number }}
+            of
+            {{ page_obj.paginator.num_pages }}
+        </span>
+
+        {% if page_obj.has_next %}
+
+            <a href="?page={{ page_obj.next_page_number }}">
+                Next →
+            </a>
+
+        {% endif %}
+
+    </div>
+
+{% endif %}
+
+{% endblock %}

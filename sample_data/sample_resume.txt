@@ -1,0 +1,24 @@
+YOUR NAME
+Junior Python Developer | Gurugram, India
+
+SUMMARY
+Computer Science graduate with hands-on experience building web applications using Python,
+Django, HTML, CSS and JavaScript. Interested in backend development and machine learning.
+
+TECHNICAL SKILLS
+Python, Django, HTML, CSS, JavaScript, MySQL, SQLite, REST API, Git, GitHub,
+Pandas, NumPy, Scikit-learn, OOP, Problem Solving.
+
+PROJECTS
+Employee Management System
+- Built a Django application to manage employee records with create, read, update and delete operations.
+- Designed responsive pages using HTML and CSS.
+- Connected the application to a relational database using Django ORM.
+
+Spam Message Classifier
+- Used Python and Scikit-learn to classify SMS messages.
+- Applied text preprocessing and TF-IDF feature extraction.
+- Evaluated a Naive Bayes model.
+
+EDUCATION
+B.Tech Computer Science and Engineering

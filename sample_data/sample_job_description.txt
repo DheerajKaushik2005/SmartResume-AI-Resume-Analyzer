@@ -1,0 +1,17 @@
+Junior Python Developer
+
+We are looking for a Junior Python Developer to build and maintain web applications.
+Required skills:
+- Python programming and object-oriented programming (OOP)
+- Django or Flask framework
+- HTML, CSS and JavaScript
+- SQL and MySQL database knowledge
+- REST API development and integration
+- Git and GitHub version control
+- Basic knowledge of Pandas, NumPy and Scikit-learn
+- Problem solving, communication and teamwork
+
+Responsibilities:
+Develop backend features, create and consume REST APIs, work with relational databases,
+write clean and maintainable code, debug issues, collaborate with frontend developers,
+and participate in code reviews.
